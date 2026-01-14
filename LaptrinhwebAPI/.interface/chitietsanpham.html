@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết sản phẩm | Mạnh Hùng Shop</title>
+
+    <style>
+        * { box-sizing: border-box; margin:0; padding:0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: url("images/ethereal-09.jpg") no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content:"";
+            position: fixed;
+            inset:0;
+            background: rgba(0,0,0,0.05);
+            z-index:-1;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            position: fixed;
+            top:0;
+            width:100%;
+            z-index:1000;
+            padding: 14px 40px;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        header h1 {
+            cursor:pointer;
+            font-size: 24px;
+            margin-left: 600px;
+        }
+
+        /* ===== BANNER ===== */
+        .banner {
+            margin-top: 70px;
+            padding: 120px 40px;
+            text-align: center;
+            color: #333;
+
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            margin-left: 40px;
+            margin-right: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        .banner h2 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .banner p {
+            font-size: 20px;
+        }
+
+        /* ===== PRODUCT BOX ===== */
+        .box {
+            max-width: 900px;
+            margin: 60px auto;
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        img {
+            width: 380px;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+
+        .price {
+            color: #e53935;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .info p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 22px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .btn-cart {
+            background: rgba(0,0,0,0.85);
+            color: #fff;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #e53935, #c62828);
+            color: #fff;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #555;
+
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.4);
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            .box {
+                flex-direction: column;
+            }
+            img {
+                width: 100%;
+            }
+        }
+        .back-btn {
+            position: absolute;
+            left: 40px;
+            width: 55px;
+            height: 35px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.6);
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.25s;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.45);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div style="display:flex; align-items:center; gap:14px;">
+        <button class="back-btn" onclick="history.back()">←</button>
+        <h1 onclick="window.location.href='web.html'">📦Chi tiết sản phẩm</h1>
+    </div>
+</header>
+
+<section class="banner" id="home">
+    <div class="banner-content" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+        <!-- Bên trái -->
+        <div class="banner-left" style="flex:1; min-width:200px; text-align:left;">
+            <h2 style="font-size:48px; margin-bottom:10px; color:#333;">Cửa hàng</h2>
+        </div>
+
+        <!-- Bên phải -->
+        <div class="banner-right" style="flex:1; min-width:200px; text-align:right;">
+            <h2 style="font-size:36px; margin-bottom:10px; color:#333;">Mừng Tết Bính Ngọ</h2>
+            <p style="font-size:24px; color:#333;">Tặng quà Tết ấn tượng</p>
+        </div>
+    </div>
+</section>
+
+<div class="box" id="detail"></div>
+
+<footer>
+    © 2026 Mạnh Hùng Shop
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = Number(params.get("id")); // chuyển sang Number để tránh NaN
+let product; // lưu sản phẩm hiện tại
+
+async function loadDetail(){
+    if(!id) return alert("❌ Sản phẩm không tồn tại!");
+
+    const res = await fetch(`http://localhost:3000/api/sanphams/${id}`);
+    if(!res.ok) return alert("❌ Không thể lấy thông tin sản phẩm!");
+
+    product = await res.json();
+
+    document.getElementById("detail").innerHTML = `
+        <img src="${product.hinh_anh || 'images/default-product.png'}">
+        <div class="info">
+            <h1>${product.ten}</h1>
+            <div class="price">${Number(product.gia).toLocaleString()} đ</div>
+
+            <p><b>Danh mục:</b> ${product.ten_danhmuc}</p>
+            <p><b>Màu sắc:</b> ${product.mausac || "Đang cập nhật"}</p>
+            <p><b>Dung lượng:</b> ${product.dungluong || "Đang cập nhật"}</p>
+            <p><b>Số lượng còn lại:</b> ${product.soluong ?? "Đang cập nhật"}</p>
+
+            <div class="actions">
+                <button class="btn-cart" onclick="addToCart()">🛒 Thêm vào giỏ</button>
+                <button class="btn-buy" onclick="buyNow()">⚡ Mua ngay</button>
+            </div>
+        </div>
+    `;
+}
+
+function addToCart() {
+    if(!product) return alert("❌ Sản phẩm không tồn tại!");
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // kiểm tra sản phẩm đã có trong giỏ
+    const existing = cart.find(p => p.id === product.id);
+    if(existing){
+        existing.soluong += 1;
+    } else {
+        cart.push({...product, soluong: 1});
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert("🛒 Đã thêm vào giỏ hàng");
+}
+
+function buyNow() {
+    // alert("⚡ Chuyển sang thanh toán");
+    window.location.href = `thanhtoansanpham.html?id=${id}`;
+}
+
+loadDetail();
+</script>
+
+</body>
+</html>

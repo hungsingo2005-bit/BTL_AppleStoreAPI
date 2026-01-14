@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shop Online | Mạnh Hùng Shop</title>
+
+    <style>
+        * { box-sizing: border-box; margin:0; padding:0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: url("images/ethereal-09.jpg") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        body::before {
+            content:"";
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.05);
+            z-index: -1;
+        }
+
+        header {
+            position: fixed;
+            top: 0; width: 100%; z-index:1000;
+            color:#333;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 15px 40px;
+            display:flex; align-items:center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .slider-nav {
+            position: relative;
+            display:flex;
+            width:420px; height:46px;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(18px);
+            border-radius:40px;
+            padding:4px;
+            border:1px solid rgba(255,255,255,0.4);
+        }
+
+        .slider-item {
+            flex:1;
+            text-align:center;
+            line-height:38px;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            z-index:2;
+            /* color:#fff; */
+            transition:opacity 0.3s;
+            transition: 0.3s;
+        }
+        .slider-item:hover { opacity:0.7; transform: scale(1.05); }
+
+        .slider-indicator {
+            position:absolute;
+            top:4px; left:8px;
+            width: calc(25% - 8px);
+            height: calc(100% - 8px);
+            background: rgba(255,255,255,0.35);
+            border-radius:30px;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.6),
+                        0 6px 20px rgba(0,0,0,0.15);
+            transition: transform 0.4s cubic-bezier(.18,.89,.32,1.28);
+            z-index:1;
+        }
+
+        /* ===== BANNER ===== */
+        .banner {
+            margin-top: 70px;
+            padding: 200px 40px;
+            color:#fff;
+            text-align:center;
+            text-shadow:0 2px 6px rgba(0,0,0,0.6);
+
+            /* background mới */
+            background: url('https://external-preview.redd.it/mT98oVBcAs5YvR8E0ql91HujDyVcUVKenLyYHkjw_GI.jpg?width=1080&crop=smart&auto=webp&s=4c1a9095e45cc6c369c5ac4d0c020b9d89150d33') no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+        }
+
+        .container { padding:40px; margin-top: -20px;}
+        h2 { margin-bottom: 20px; }
+
+        .products { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .product { 
+            background: rgba(255,255,255,0.2); 
+            backdrop-filter: blur(16px); 
+            border: 1px solid rgba(255,255,255,0.35); 
+            border-radius: 20px; padding: 15px; box-shadow: 0 12px 30px rgba(0,0,0,0.15); 
+            transition: 0.35s; 
+        }
+        .product:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.25); 
+        }
+        /* footer { 
+            text-align:center; padding:20px; 
+            background:rgba(0,0,0,0.7); 
+            color:#aaa; backdrop-filter: blur(10px); 
+        } */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #555;
+
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.4);
+        }
+        /* Tăng kích thước ảnh sản phẩm trong tất cả các .product */
+        .product img {
+            cursor:pointer;
+            width: 100%;          /* rộng vừa khít khung */
+            height: 200px;        /* tăng chiều cao (có thể chỉnh tùy ý) */
+            object-fit: cover;    /* cắt vừa ảnh nếu không đúng tỉ lệ */
+            border-radius: 15px;  /* bo góc mềm mại */
+            margin-bottom: 10px;  /* cách chữ */
+            transition: transform 0.3s;
+        }
+        .product img:hover {
+            transform: scale(1.1); /* zoom nhẹ khi hover */
+        }
+        /* ------------------ CAROUSEL ------------------ */
+        .carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-wrapper h2 {
+            padding:15px 40px; margin-top: -15px;
+        }
+        .carousel {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+        .carousel-item img {
+            cursor:pointer;
+            width: 500px;  /* Điều chỉnh sao cho vừa với container */
+            height: 550px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        .carousel-item img:hover {
+            transform: scale(1.02);
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.35);
+            color:#333;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 20px;
+        }
+        .carousel-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        #prevBtn { left: 0; }
+        #nextBtn { right: 0; }
+
+        /* ------------------ CAROUSEL 2 ------------------ */
+        .carousel-wrapper2 {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-wrapper2 h2 {
+            padding:15px 40px; margin-top: 10px;
+        }
+        .carousel2 {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+        .carousel-item2 img {
+            cursor:pointer;
+            width: 300px;  /* Điều chỉnh sao cho vừa với container */
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        .carousel-item2 img:hover {
+            transform: scale(1.02);
+        }
+        .carousel-btn2 {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.35);
+            color:#333;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 20px;
+        }
+        .carousel-btn2:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        #prevBtn2 { left: 0; }
+        #nextBtn2 { right: 0; }
+
+        /* ------------------ CAROUSEL 3 ------------------ */
+        .carousel-wrapper3 {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-wrapper3 h2 {
+            padding:15px 40px; margin-top: 10px;
+        }
+        .carousel3 {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+        .carousel-item3 img {
+            cursor:pointer;
+            width: 300px;  /* Điều chỉnh sao cho vừa với container */
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        .carousel-item3 img:hover {
+            transform: scale(1.02);
+        }
+        .carousel-btn3 {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.35);
+            color:#333;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 20px;
+        }
+        .carousel-btn3:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        #prevBtn3 { left: 0; }
+        #nextBtn3 { right: 0; }
+
+        /* ------------------ CAROUSEL 4 ------------------ */
+        .carousel-wrapper4 {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-wrapper4 h2 {
+            padding:15px 40px; margin-top: 10px;
+        }
+        .carousel4 {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+        .carousel-item4 img {
+            cursor:pointer;
+            width: 300px;  /* Điều chỉnh sao cho vừa với container */
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        .carousel-item4 img:hover {
+            transform: scale(1.02);
+        }
+        .carousel-btn4 {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.35);
+            color:#333;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 20px;
+        }
+        .carousel-btn4:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        #prevBtn4 { left: 0; }
+        #nextBtn4 { right: 0; }
+
+        /* ------------------ CAROUSEL 5 ------------------ */
+        .carousel-wrapper5 {
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-wrapper5 h2 {
+            padding:15px 40px; margin-top: 10px;
+        }
+        .carousel5 {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s ease;
+        }
+        .carousel-item5 img {
+            cursor:pointer;
+            width: 300px;  /* Điều chỉnh sao cho vừa với container */
+            height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+        .carousel-item5 img:hover {
+            transform: scale(1.02);
+        }
+        .carousel-btn5 {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.35);
+            color:#333;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 10;
+            font-size: 20px;
+        }
+        .carousel-btn5:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+        #prevBtn5 { left: 0; }
+        #nextBtn5 { right: 0; }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🍎AppleStore</h1>
+
+    <div class="slider-nav">
+        <div class="slider-item" data-url="web.html">Trang chủ</div>
+        <div class="slider-item" data-url="sanpham.html">Sản phẩm</div>
+        <div class="slider-item" data-url="giohang.html">Giỏ hàng</div>
+        <div class="slider-item" id="authBtn">Đăng nhập</div>
+
+        <div class="slider-indicator" id="slider"></div>
+    </div>
+</header>
+
+<section class="banner" id="home">
+    <div class="banner-content" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+        <!-- Bên trái -->
+        <div class="banner-left" style="flex:1; min-width:200px; text-align:left;">
+            <h2 style="font-size:48px; margin-bottom:10px; color:#333;">Cửa hàng</h2>
+        </div>
+
+        <!-- Bên phải -->
+        <div class="banner-right" style="flex:1; min-width:200px; text-align:right;">
+            <h2 style="font-size:36px; margin-bottom:10px; color:#333;">Mừng Tết Bính Ngọ</h2>
+            <p style="font-size:24px; color:#333;">Tặng quà Tết ấn tượng</p>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+    <h2>Danh mục sản phẩm</h2>
+    <div class="products">
+        <div class="product" data-target="iphone">
+        <img src="images/danh_muc_1.png">
+        <h3>📱 iPhone</h3>
+    </div>
+
+    <div class="product" data-target="ipad">
+        <img src="images/danh_muc_2.png">
+        <h3>📲 iPad</h3>
+    </div>
+
+    <div class="product" data-target="macbook">
+        <img src="images/danh_muc_3.png">
+        <h3>💻 MacBook</h3>
+    </div>
+
+    <div class="product" data-target="watch">
+        <img src="images/danh_muc_4.png">
+        <h3>⌚ Apple Watch</h3>
+    </div>
+
+    <div class="product" data-target="airpods">
+        <img src="images/danh_muc_5.png">
+        <h3>🎧 AirPods</h3>
+    </div>
+
+    <div class="product" data-target="phukien">
+        <img src="images/danh_muc_6.png">
+        <h3>🔌 Phụ kiện</h3>
+    </div>
+    </div>
+</section>
+
+<div class="carousel-wrapper">
+    <h2>1. Mẫu mã mới nhất. Thêm chút tuyệt vời cho năm mới</h2>
+    <div class="carousel">
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_1.png" alt="Sản phẩm 1"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_2.png" alt="Sản phẩm 2"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_3.png" alt="Sản phẩm 3"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_4.png" alt="Sản phẩm 4"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_7.png" alt="Sản phẩm 5"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_8.png" alt="Sản phẩm 6"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_9.png" alt="Sản phẩm 7"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_10.png" alt="Sản phẩm 8"></div>
+        <div class="carousel-item"><img src="images/mau_ma_moi_nhat_11.png" alt="Sản phẩm 9"></div>
+    </div>
+
+    <button id="prevBtn" class="carousel-btn">&#10094;</button>
+    <button id="nextBtn" class="carousel-btn">&#10095;</button>
+</div>
+
+<div class="carousel-wrapper2">
+    <h2>2. Lựa chọn cho tết. Tưng bừng đón xuân Bính Ngọ</h2>
+    <div class="carousel2">
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_1.png" alt="Sản phẩm 1"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_2.png" alt="Sản phẩm 2"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_3.png" alt="Sản phẩm 3"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_4.png" alt="Sản phẩm 4"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_5.png" alt="Sản phẩm 5"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_6.png" alt="Sản phẩm 6"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_7.png" alt="Sản phẩm 7"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_8.png" alt="Sản phẩm 8"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_9.png" alt="Sản phẩm 9"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_10.png" alt="Sản phẩm 10"></div>
+        <div class="carousel-item2"><img src="images/lua_chon_cho_tet_11.png" alt="Sản phẩm 11"></div>
+    </div>
+    <button id="prevBtn2" class="carousel-btn2">&#10094;</button>
+    <button id="nextBtn2" class="carousel-btn2">&#10095;</button>
+</div>
+
+<div class="carousel-wrapper3">
+    <h2>3. Lòng biết ơn. Bày tỏ tấm lòng thành của bạn</h2>
+    <div class="carousel3">
+        <div class="carousel-item3"><img src="images/long_biet_on_1.png" alt="Sản phẩm 1"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_2.png" alt="Sản phẩm 2"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_3.png" alt="Sản phẩm 3"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_4.png" alt="Sản phẩm 4"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_5.png" alt="Sản phẩm 5"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_6.png" alt="Sản phẩm 6"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_7.png" alt="Sản phẩm 7"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_8.png" alt="Sản phẩm 8"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_9.png" alt="Sản phẩm 9"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_10.png" alt="Sản phẩm 10"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_11.png" alt="Sản phẩm 11"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_12.png" alt="Sản phẩm 12"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_13.png" alt="Sản phẩm 13"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_14.png" alt="Sản phẩm 14"></div>
+        <div class="carousel-item3"><img src="images/long_biet_on_15.png" alt="Sản phẩm 15"></div>
+    </div>
+    <button id="prevBtn3" class="carousel-btn3">&#10094;</button>
+    <button id="nextBtn3" class="carousel-btn3">&#10095;</button>
+</div>
+
+<div class="carousel-wrapper4">
+    <h2>4. Sáng tạo. Những món quà không ngừng biến hóa</h2>
+    <div class="carousel4">
+        <div class="carousel-item4"><img src="images/sang_tao_1.png" alt="Sản phẩm 1"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_2.png" alt="Sản phẩm 2"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_3.png" alt="Sản phẩm 3"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_4.png" alt="Sản phẩm 4"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_5.png" alt="Sản phẩm 5"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_6.png" alt="Sản phẩm 6"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_7.png" alt="Sản phẩm 7"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_8.png" alt="Sản phẩm 8"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_9.png" alt="Sản phẩm 9"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_10.png" alt="Sản phẩm 10"></div>
+        <div class="carousel-item4"><img src="images/sang_tao_11.png" alt="Sản phẩm 11"></div>
+    </div>
+    <button id="prevBtn4" class="carousel-btn4">&#10094;</button>
+    <button id="nextBtn4" class="carousel-btn4">&#10095;</button>
+</div>
+
+<div class="carousel-wrapper5">
+    <h2>5. Sức khỏe. Bày tỏ lòng quan tâm của bạn</h2>
+    <div class="carousel5">
+        <div class="carousel-item5"><img src="images/suc_khoe_1.png" alt="Sản phẩm 1"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_2.png" alt="Sản phẩm 2"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_3.png" alt="Sản phẩm 3"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_4.png" alt="Sản phẩm 4"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_5.png" alt="Sản phẩm 5"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_6.png" alt="Sản phẩm 6"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_7.png" alt="Sản phẩm 7"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_8.png" alt="Sản phẩm 8"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_9.png" alt="Sản phẩm 9"></div>
+        <div class="carousel-item5"><img src="images/suc_khoe_10.png" alt="Sản phẩm 10"></div>
+    </div>
+    <button id="prevBtn5" class="carousel-btn5">&#10094;</button>
+    <button id="nextBtn5" class="carousel-btn5">&#10095;</button>
+</div>
+
+<footer>
+    Lê Nguyễn Mạnh Hùng - 10123153
+</footer>
+
+<script>
+/* SLIDER NAV */
+const slider = document.getElementById("slider");
+const items = document.querySelectorAll(".slider-item");
+const authBtn = document.getElementById("authBtn");
+const token = localStorage.getItem("token");
+
+// Tự highlight theo trang hiện tại
+const currentPage = window.location.pathname.split("/").pop();
+let activeIndex = Array.from(items).findIndex(i=>i.dataset.url===currentPage);
+if(activeIndex===-1) activeIndex=0;
+slider.style.transform=`translateX(${activeIndex*100}%)`;
+
+// Click chuyển trang hoặc cuộn về đầu trang
+items.forEach((item, index) => {
+    if(item === authBtn) return; // authBtn xử lý riêng
+    item.onclick = () => {
+        // Nếu đang ở trang web.html và nhấn "Trang chủ"
+        if(currentPage === "web.html" && item.dataset.url === "web.html"){
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            slider.style.transform = `translateX(${index*100}%)`;
+        } else {
+            slider.style.transform = `translateX(${index*100}%)`;
+            setTimeout(() => { window.location.href = item.dataset.url; }, 250);
+        }
+    };
+});
+
+// LOGIN / LOGOUT
+if(token){
+    authBtn.innerText = "Đăng xuất";
+    authBtn.onclick = () => {
+        if(confirm("Bạn có chắc muốn đăng xuất không?")){
+            localStorage.removeItem("token");
+            location.reload();
+        }
+    };
+} else {
+    authBtn.onclick = () => {
+        const url = authBtn.dataset.url || "interface.html";
+        window.location.href = url;
+    };
+}
+// ------------------ CAROUSEL ------------------
+const carousel = document.querySelector('.carousel');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+let currentIndex = 0;
+const totalItems = document.querySelectorAll('.carousel-item').length;
+const visibleItems = 3; // số ảnh hiển thị cùng lúc
+const itemWidth = document.querySelector('.carousel-item').offsetWidth + 20; // + gap
+
+prevBtn.onclick = () => {
+    if(currentIndex > 0){
+        currentIndex--;
+        carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+};
+nextBtn.onclick = () => {
+    if(currentIndex < totalItems - visibleItems){
+        currentIndex++;
+        carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+};
+// ------------------ CAROUSEL 2 ------------------
+const carousel2 = document.querySelector('.carousel2');
+const prevBtn2 = document.getElementById('prevBtn2');
+const nextBtn2 = document.getElementById('nextBtn2');
+
+let currentIndex2 = 0;
+const totalItems2 = document.querySelectorAll('.carousel-item2').length;
+const visibleItems2 = 3; // số ảnh hiển thị cùng lúc
+const itemWidth2 = document.querySelector('.carousel-item2').offsetWidth + 20; // + gap
+
+prevBtn2.onclick = () => {
+    if(currentIndex2 > 0){
+        currentIndex2--;
+        carousel2.style.transform = `translateX(-${currentIndex2 * itemWidth2}px)`;
+    }
+};
+nextBtn2.onclick = () => {
+    if(currentIndex2 < totalItems2 - visibleItems2){
+        currentIndex2++;
+        carousel2.style.transform = `translateX(-${currentIndex2 * itemWidth2}px)`;
+    }
+};
+// ------------------ CAROUSEL 3 ------------------
+const carousel3 = document.querySelector('.carousel3');
+const prevBtn3 = document.getElementById('prevBtn3');
+const nextBtn3 = document.getElementById('nextBtn3');
+let currentIndex3 = 0;
+const totalItems3 = document.querySelectorAll('.carousel-item3').length;
+const visibleItems3 = 3; // số ảnh hiển thị cùng lúc
+const itemWidth3 = document.querySelector('.carousel-item3').offsetWidth + 20; // + gap
+prevBtn3.onclick = () => {
+    if(currentIndex3 > 0){
+        currentIndex3--;
+        carousel3.style.transform = `translateX(-${currentIndex3 * itemWidth3}px)`;
+    }
+};
+nextBtn3.onclick = () => {
+    if(currentIndex3 < totalItems3 - visibleItems3){
+        currentIndex3++;
+        carousel3.style.transform = `translateX(-${currentIndex3 * itemWidth3}px)`;
+    }
+};
+// ------------------ CAROUSEL 4 ------------------
+const carousel4 = document.querySelector('.carousel4');
+const prevBtn4 = document.getElementById('prevBtn4');
+const nextBtn4 = document.getElementById('nextBtn4');
+let currentIndex4 = 0;
+const totalItems4 = document.querySelectorAll('.carousel-item4').length;
+const visibleItems4 = 3; // số ảnh hiển thị cùng lúc
+const itemWidth4 = document.querySelector('.carousel-item4').offsetWidth + 20; // + gap
+prevBtn4.onclick = () => {
+    if(currentIndex4 > 0){
+        currentIndex4--;
+        carousel4.style.transform = `translateX(-${currentIndex4 * itemWidth4}px)`;
+    }
+};
+nextBtn4.onclick = () => {
+    if(currentIndex4 < totalItems4 - visibleItems4){
+        currentIndex4++;
+        carousel4.style.transform = `translateX(-${currentIndex4 * itemWidth4}px)`;
+    }
+};
+// ------------------ CAROUSEL 5 ------------------
+const carousel5 = document.querySelector('.carousel5');
+const prevBtn5 = document.getElementById('prevBtn5');
+const nextBtn5 = document.getElementById('nextBtn5');
+let currentIndex5 = 0;
+const totalItems5 = document.querySelectorAll('.carousel-item5').length;
+const visibleItems5 = 3; // số ảnh hiển thị cùng lúc
+const itemWidth5 = document.querySelector('.carousel-item5').offsetWidth + 20; // + gap
+prevBtn5.onclick = () => {
+    if(currentIndex5 > 0){
+        currentIndex5--;
+        carousel5.style.transform = `translateX(-${currentIndex5 * itemWidth5}px)`;
+    }
+};
+nextBtn5.onclick = () => {
+    if(currentIndex5 < totalItems5 - visibleItems5){
+        currentIndex5++;
+        carousel5.style.transform = `translateX(-${currentIndex5 * itemWidth5}px)`;
+    }
+};
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục
+document.querySelectorAll('.product').forEach(item => {
+    item.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        const target = item.dataset.target;
+        window.location.href = `sanpham.html#${target}`;
+    };
+});
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục carousel
+// document.querySelectorAll('.carousel').forEach(carousel => {
+//     carousel.onclick = () => {
+//         window.location.href = "sanpham.html";
+//     };
+// });
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục carousel 2
+// document.querySelectorAll('.carousel2').forEach(carousel2 => {
+//     carousel2.onclick = () => {
+//         window.location.href = "sanpham.html";
+//     };
+// });
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục carousel 3
+// document.querySelectorAll('.carousel3').forEach(carousel3 => {
+//     carousel3.onclick = () => {
+//         window.location.href = "sanpham.html";
+//     };
+// });
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục carousel 4
+// document.querySelectorAll('.carousel4').forEach(carousel4 => {
+//     carousel4.onclick = () => {
+//         window.location.href = "sanpham.html";
+//     };
+// });
+// Chuyển sang trang sanpham.html khi nhấn vào bất kỳ sản phẩm nào trong danh mục carousel 5
+// document.querySelectorAll('.carousel5').forEach(carousel5 => {
+//     carousel5.onclick = () => {
+//         window.location.href = "sanpham.html";
+//     };
+// });
+document.querySelectorAll('.carousel img').forEach(img => {
+    img.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        window.location.href = "sanpham.html";
+    };
+});
+document.querySelectorAll('.carousel2 img').forEach(img => {
+    img.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        window.location.href = "sanpham.html";
+    };
+});
+document.querySelectorAll('.carousel3 img').forEach(img => {
+    img.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        window.location.href = "sanpham.html";
+    };
+});
+document.querySelectorAll('.carousel4 img').forEach(img => {
+    img.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        window.location.href = "sanpham.html";
+    };
+});
+document.querySelectorAll('.carousel5 img').forEach(img => {
+    img.onclick = () => {
+        if(!token){
+            alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+            window.location.href = "interface.html";
+            return;
+        }
+        window.location.href = "sanpham.html";
+    };
+});
+</script>
+</body>
+</html>

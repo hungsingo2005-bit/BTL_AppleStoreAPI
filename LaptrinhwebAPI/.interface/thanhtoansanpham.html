@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thanh toán sản phẩm | Mạnh Hùng Shop</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+    font-family:Arial,sans-serif;
+    background:url("images/ethereal-09.jpg") no-repeat center/cover fixed;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.08);
+    z-index:-1;
+}
+
+/* ===== HEADER ===== */
+header{
+    position:fixed;
+    top:0;width:100%;
+    padding:14px 40px;
+    background:rgba(255,255,255,.3);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,.4);
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+.back-btn{
+    width:55px;height:35px;
+    border-radius:20px;
+    border:none;
+    background:rgba(255,255,255,.6);
+    cursor:pointer;
+    font-size:20px;
+    transition: 0.25s;
+}
+.back-btn:hover {
+    background: rgba(255,255,255,0.45);
+    transform: scale(1.1);
+}
+h1{font-size:22px}
+
+/* ===== CONTAINER ===== */
+.container{
+    max-width:1000px;
+    margin:120px auto;
+    background:rgba(255,255,255,.35);
+    backdrop-filter:blur(20px);
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+/* ===== PRODUCT ===== */
+.product-box img{
+    width:100%;
+    border-radius:16px;
+    margin-bottom:12px;
+}
+.price{
+    color:#e53935;
+    font-size:24px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+/* ===== FORM ===== */
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:bold;
+}
+input,textarea{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    margin-top:6px;
+}
+textarea{resize:none}
+
+.btn-pay{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:none;
+    background:linear-gradient(135deg,#e53935,#c62828);
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.btn-pay:hover{opacity:.9}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+    .container{grid-template-columns:1fr}
+}
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    color: #555;
+
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.4);
+}
+
+/* ===== NÚT XONG ===== */
+.btn-done {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border-radius: 14px;
+    border: none;
+    background:rgba(255,255,255,.6);
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.btn-done:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+    color: #333;
+    background: rgba(255,255,255,0.45);
+    transform: scale(1.1);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1>Thanh toán sản phẩm</h1>
+</header>
+
+<section class="container">
+
+    <!-- THÔNG TIN SẢN PHẨM -->
+    <div class="product-box" id="product"></div>
+
+    <!-- FORM THANH TOÁN -->
+    <div class="checkout-box">
+        <h2>🧾 Thông tin khách hàng</h2>
+
+        <label>Họ và tên</label>
+        <input type="text" id="name" placeholder="Lê Nguyễn Mạnh Hùng">
+
+        <label>Số điện thoại</label>
+        <input type="text" id="phone" placeholder="09xx xxx xxx">
+
+        <label>Địa chỉ giao hàng</label>
+        <textarea rows="3" id="address"></textarea>
+
+        <button class="btn-pay" onclick="pay()">✅ Xác nhận thanh toán</button>
+    </div>
+
+</section>
+
+<footer>
+    © 2026 Mạnh Hùng Shop
+</footer>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+let productData = null;
+
+async function loadProduct(){
+    const res = await fetch(`http://localhost:3000/api/sanphams/${id}`);
+    productData = await res.json();
+
+    document.getElementById("product").innerHTML = `
+        <img src="${productData.hinh_anh}">
+        <h2>${productData.ten}</h2>
+        <div class="price">${Number(productData.gia).toLocaleString()} đ</div>
+        <p><b>Màu sắc:</b> ${productData.mausac || "—"}</p>
+        <p><b>Dung lượng:</b> ${productData.dungluong || "—"}</p>
+    `;
+}
+
+function pay(){
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+
+    if(!name || !phone || !address){
+        alert("❌ Vui lòng nhập đầy đủ thông tin");
+        return;
+    }
+
+    alert(`
+✅ ĐẶT HÀNG THÀNH CÔNG
+👤 ${name}
+📱 ${phone}
+🏠 ${address}
+
+🛒 ${productData.ten}
+💰 ${Number(productData.gia).toLocaleString()} đ
+    `);
+
+    // Ẩn form thanh toán
+    document.querySelector(".checkout-box").style.display = "none";
+
+    // Hiển thị hình ảnh + chữ "Xong"
+    document.getElementById("product").innerHTML = `
+        <div style="text-align:center; margin-top:50px;">
+            <img src="imagesQR/qrthanhtoan.png" style="width:200px; margin-bottom:20px;">
+            <button class="btn-done" onclick="window.location.href='web.html'">Xong</button>
+        </div>
+    `;
+
+    // window.location.href = "web.html";
+}
+
+loadProduct();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sản phẩm | Mạnh Hùng Shop</title>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("images/ethereal-09.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+            image-rendering: -webkit-optimize-contrast;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.05);
+            z-index: -1;
+        }
+
+        /* ===== HEADER SLIDER ===== */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            color:#333;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+        /* ===== BANNER ===== */
+        .banner {
+            margin-top: 70px;
+            padding: 200px 40px;
+            color:#fff;
+            text-align:center;
+            text-shadow:0 2px 6px rgba(0,0,0,0.6);
+
+            /* background mới */
+            background: url('https://external-preview.redd.it/mT98oVBcAs5YvR8E0ql91HujDyVcUVKenLyYHkjw_GI.jpg?width=1080&crop=smart&auto=webp&s=4c1a9095e45cc6c369c5ac4d0c020b9d89150d33') no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+        }
+
+        /* slider nav */
+        .slider-nav {
+            position: relative;
+            display: flex;
+            width: 420px;
+            height: 46px;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(18px);
+            border-radius: 40px;
+            padding: 4px;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .slider-item {
+            flex: 1;
+            text-align: center;
+            line-height: 38px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 2;
+            /* color: #fff; */
+            transition: opacity 0.3s;
+        }
+
+        .slider-item:hover {
+            opacity: 0.7;
+        }
+
+        .slider-indicator {
+            position: absolute;
+            top: 4px;
+            left: 12px;
+            width: calc(25% - 8px);
+            height: calc(100% - 8px);
+            background: rgba(255,255,255,0.35);
+            border-radius: 30px;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.6),
+                        0 6px 20px rgba(0,0,0,0.15);
+            transition: transform 0.4s cubic-bezier(.18,.89,.32,1.28);
+            z-index: 1;
+        }
+
+        .add-btn {
+            margin-left: 16px;
+            margin-right: 16px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            color:#333;
+            font-size: 22px;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.25s;
+        }
+
+        .add-btn:hover {
+            background: rgba(255,255,255,0.45);
+            transform: scale(1.2);
+        }
+
+        .container {
+            padding: 40px;
+            margin-top: -60px;
+        }
+
+        h2 {
+            margin: 40px 0 20px;
+            color: #fff;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(16px);
+            border-radius: 18px;
+            padding: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            transition: 0.3s;
+            color: #111;
+            cursor: pointer;
+        }
+
+        .product:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .price {
+            color: #e53935;
+            font-weight: bold;
+            margin: 6px 0;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .cart-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: rgba(255,255,255,0.6);
+            transition: 0.3s;
+        }
+        .cart-btn:hover {
+            /* background: rgba(33,150,243,1); */
+            transform: translateY(-2px);
+            opacity: 0.9;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+            color: #333;
+            background: rgba(255,255,255,0.65);
+            transform: scale(1.1);
+        }
+
+        .edit-btn {
+            width: 44px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background:rgba(255,255,255,.6);
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .edit-btn:hover {
+            /* background: rgba(33,150,243,1); */
+            transform: translateY(-2px);
+            opacity: 0.9;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+            color: #333;
+            background: rgba(255,255,255,0.45);
+            transform: scale(1.1);
+        }
+
+        .delete-btn {
+            width: 44px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            background:rgba(255,255,255,.6);
+            color: #333;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .delete-btn:hover {
+            /* background: rgba(229,57,53,1); */
+            transform: translateY(-2px);
+            opacity: 0.9;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.35);
+            color: #333;
+            background: rgba(255,255,255,0.45);
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #555;
+
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.4);
+        }
+        /* ==== SEARCH BOX ===== */
+        .search-box {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box input {
+            width: 420px;
+            max-width: 90%;
+            padding: 10px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(15px);
+            color: #333;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box input::placeholder {
+            color: #555;
+        }
+
+        .search-box input:focus {
+            background: rgba(255,255,255,0.45);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>🍎AppleStore</h1>
+    <!-- SEARCH BOX -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Tìm theo tên sản phẩm..." />
+    </div>
+    <div style="display:flex; align-items:center;">
+        <div class="add-btn" onclick="addProduct()">+</div>
+        <div class="slider-nav">
+            <div class="slider-item" data-url="web.html">Trang chủ</div>
+            <div class="slider-item" data-url="sanpham.html">Sản phẩm</div>
+            <div class="slider-item" data-url="giohang.html">Giỏ hàng</div>
+            <div class="slider-item" data-url="interface.html">Đăng nhập</div>
+            <div class="slider-indicator" id="slider"></div>
+        </div>
+    </div>
+</header>
+<section class="banner" id="home">
+    <div class="banner-content" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+        <!-- Bên trái -->
+        <div class="banner-left" style="flex:1; min-width:200px; text-align:left; margin-top:-40px;">
+            <h2 style="font-size:48px; margin-bottom:10px; color:#333;">Cửa hàng</h2>
+        </div>
+
+        <!-- Bên phải -->
+        <div class="banner-right" style="flex:1; min-width:200px; text-align:right; margin-top:-40px;">
+            <h2 style="font-size:36px; margin-bottom:10px; color:#333;">Mừng Tết Bính Ngọ</h2>
+            <p style="font-size:24px; color:#333;">Tặng quà Tết ấn tượng</p>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+
+    <h2 id="iphone">📱 iPhone</h2>
+    <div class="products"></div>
+
+    <h2 id="ipad">📲 iPad</h2>
+    <div class="products"></div>
+
+    <h2 id="macbook">💻 MacBook</h2>
+    <div class="products"></div>
+
+    <h2 id="watch">⌚ Apple Watch</h2>
+    <div class="products"></div>
+
+    <h2 id="airpods">🎧 AirPods</h2>
+    <div class="products"></div>
+
+    <h2 id="phukien">🔌 Phụ kiện</h2>
+    <div class="products"></div>
+
+</section>
+
+<footer>
+    Lê Nguyễn Mạnh Hùng - 10123153
+</footer>
+
+<script>
+/*
+async function loadProducts() {
+    const res = await fetch("http://localhost:3000/api/sanphams");
+    const data = await res.json();
+
+    const map = {
+        "iPhone": document.querySelector("#iphone + .products"),
+        "iPad": document.querySelector("#ipad + .products"),
+        "MacBook": document.querySelector("#macbook + .products"),
+        "Apple Watch": document.querySelector("#watch + .products"),
+        "AirPods": document.querySelector("#airpods + .products"),
+        "Accessories": document.querySelector("#phukien + .products")
+    };
+
+    Object.values(map).forEach(el => el.innerHTML = "");
+
+    data.forEach(p => {
+        const box = map[p.ten_danhmuc];
+        if (!box) return;
+
+        box.innerHTML += `
+            <div class="product">
+                <img src="${p.hinh_anh || 'images/default-product.png'}"
+                    alt="${p.ten}"
+                    style="width:100%; border-radius:12px; margin-bottom:8px;"
+                    onclick="viewProduct(${p.id})">
+
+                <h3>${p.ten}</h3>
+                <div class="price">${Number(p.gia).toLocaleString()} đ</div>
+
+                <div class="actions">
+                    <button class="cart-btn" onclick="addToCart(${p.id})">Thêm giỏ</button>
+                    <button class="edit-btn" onclick="editProduct(${p.id})">✏️</button>
+                    <button class="delete-btn" onclick="deleteProduct(${p.id})">🗑</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+loadProducts();
+*/
+let allProducts = [];
+
+/* ===== LOAD + RENDER ===== */
+async function loadProducts() {
+    const res = await fetch("http://localhost:3000/api/sanphams");
+    allProducts = await res.json();
+    renderProducts(allProducts);
+}
+
+function renderProducts(data) {
+    const map = {
+        "iPhone": document.querySelector("#iphone + .products"),
+        "iPad": document.querySelector("#ipad + .products"),
+        "MacBook": document.querySelector("#macbook + .products"),
+        "Apple Watch": document.querySelector("#watch + .products"),
+        "AirPods": document.querySelector("#airpods + .products"),
+        "Accessories": document.querySelector("#phukien + .products")
+    };
+
+    Object.values(map).forEach(el => el.innerHTML = "");
+
+    data.forEach(p => {
+        const box = map[p.ten_danhmuc];
+        if (!box) return;
+
+        box.innerHTML += `
+            <div class="product">
+                <img src="${p.hinh_anh || 'images/default-product.png'}"
+                    style="width:100%; border-radius:12px; margin-bottom:8px;"
+                    onclick="viewProduct(${p.id})">
+
+                <h3>${p.ten}</h3>
+                <div class="price">${Number(p.gia).toLocaleString()} đ</div>
+
+                <div class="actions">
+                    <button class="cart-btn" onclick="addToCart(${p.id})">Thêm giỏ</button>
+                    <button class="edit-btn" onclick="editProduct(${p.id})">✏️</button>
+                    <button class="delete-btn" onclick="deleteProduct(${p.id})">🗑</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+loadProducts();
+
+/* ===== SEARCH ===== */
+document.getElementById("searchInput").addEventListener("input", function () {
+    const keyword = this.value.toLowerCase().trim();
+
+    if (!keyword) {
+        renderProducts(allProducts);
+        return;
+    }
+
+    const filtered = allProducts.filter(p =>
+        p.ten.toLowerCase().includes(keyword) ||
+        String(p.id).includes(keyword)
+    );
+
+    renderProducts(filtered);
+});
+/* ===== CÁC HÀM KHÁC ===== */
+function addProduct() {
+    if(!token){
+        alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+        window.location.href = "interface.html";
+        return;
+    }
+    window.location.href = "themsanpham.html";
+}
+
+function editProduct(id) {
+    if(!token){
+        alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+        window.location.href = "interface.html";
+        return;
+    }
+    window.location.href = `suasanpham.html?id=${id}`;
+}
+
+async function deleteProduct(id) {
+    if(!token){
+        alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+        window.location.href = "interface.html";
+        return;
+    }
+    if (!confirm("Bạn có chắc muốn xóa sản phẩm này không?")) return;
+
+    await fetch(`http://localhost:3000/api/sanphams/${id}`, {
+        method: "DELETE"
+    });
+
+    loadProducts();
+}
+
+/* ===== SLIDER NAV + LOGIN/LOGOUT ===== */
+const slider = document.getElementById("slider");
+const items = document.querySelectorAll(".slider-item");
+
+// Tìm nút auth (có text "Đăng nhập")
+const authBtn = Array.from(items).find(item => item.dataset.url.includes("interface"));
+const token = localStorage.getItem("token");
+
+// Nếu đã login, đổi chữ thành Đăng xuất
+if(token){
+    authBtn.innerText = "Đăng xuất";
+}
+
+// Tự động highlight mục tương ứng dựa trên URL hiện tại
+const currentPage = window.location.pathname.split("/").pop();
+let activeIndex = Array.from(items).findIndex(item => item.dataset.url === currentPage);
+if (activeIndex === -1) activeIndex = 0; 
+slider.style.transform = `translateX(${activeIndex * 100}%)`;
+
+// click chuyển trang hoặc xử lý login/logout
+items.forEach((item, index) => {
+    item.onclick = () => {
+        if(item === authBtn){
+            if(token){
+                // Nếu đã login → confirm logout
+                if(confirm("Bạn có chắc muốn đăng xuất không?")){
+                    localStorage.removeItem("token");
+                    location.reload(); // reload để cập nhật nút
+                    window.location.href = "web.html";
+                }
+            } else {
+                // Nếu chưa login → chuyển trang login
+                window.location.href = authBtn.dataset.url;
+            }
+            return; // dừng xử lý tiếp
+        }
+
+        // Các nút khác vẫn chuyển trang bình thường
+        slider.style.transform = `translateX(${index * 100}%)`;
+        setTimeout(() => {
+            window.location.href = item.dataset.url;
+        }, 250);
+    };
+});
+// Click chuyển trang hoặc cuộn về đầu trang
+items.forEach((item, index) => {
+    if(item === authBtn) return; // authBtn xử lý riêng
+    item.onclick = () => {
+        // Nếu đang ở trang web.html và nhấn "Trang chủ"
+        if(currentPage === "sanpham.html" && item.dataset.url === "sanpham.html"){
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            slider.style.transform = `translateX(${index*100}%)`;
+        } else {
+            slider.style.transform = `translateX(${index*100}%)`;
+            setTimeout(() => { window.location.href = item.dataset.url; }, 250);
+        }
+    };
+});
+function viewProduct(id) {
+    if(!token){
+        alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+        window.location.href = "interface.html";
+        return;
+    }
+    window.location.href = `chitietsanpham.html?id=${id}`;
+}
+window.addEventListener("load", () => {
+    if (!location.hash) return;
+
+    const target = document.querySelector(location.hash);
+    if (!target) return;
+
+    const headerOffset = 140; // header + khoảng đệm
+    const y = target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+    window.scrollTo({
+        top: y,
+        behavior: "smooth"
+    });
+});
+function addToCart(id){
+    if(!token){
+        alert("⚠ Bạn cần đăng nhập để sửa sản phẩm!");
+        window.location.href = "interface.html";
+        return;
+    }
+    // Tìm sản phẩm trong allProducts
+    const product = allProducts.find(p => p.id === id);
+    if(!product) return alert("❌ Sản phẩm không tồn tại!");
+
+    // Lấy giỏ hàng từ localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Kiểm tra sản phẩm đã có chưa
+    const existing = cart.find(p => p.id === id);
+    if(existing){
+        existing.soluong += 1; // tăng số lượng
+    } else {
+        cart.push({...product, soluong: 1});
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    
+    alert("✅ Thêm vào giỏ hàng thành công!");
+}
+</script>
+</body>
+</html>
